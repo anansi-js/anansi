@@ -1,0 +1,47 @@
+{
+  "maxConcurrency": 1,
+  "startUrls": [
+    "https://www.google.com"
+  ],
+  "allowedDomains": [
+    "google.com"
+  ],
+  "scraperSettings": {
+    "default": {
+      "hierarchySelectors": {
+        "l0": "title",
+        "l1": "main h1",
+        "l2": "main h2",
+        "l3": "main h3",
+        "l4": "main h4",
+        "content": "main p"
+      }
+    },
+    "about": {
+      "hierarchySelectors": {
+        "l0": "title",
+        "l1": "main h1",
+        "content": "main p"
+      },
+      "urlPattern": "(.)*about(.)*"
+    },
+    "shared": {
+      "userAgent": "Agent Smith",
+      "basicAuth": {
+        "user": "myuser",
+        "password": "mypass"
+      },
+      "metadataSelectors": {
+        "ie": "meta[content^='ie']"
+      },
+      "onlyContentLevel": true,
+      "excludeSelectors": [
+        "header",
+        "footer"
+      ]
+    }
+  },
+  "diagnostics": true,
+  "logLevel": "debug",
+  "maxIndexedRecords": 1000
+}

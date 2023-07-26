@@ -1,0 +1,74 @@
+name: 'Create Release'
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      # This action updates these files, so ignore them to prevent an infinite loop
+      - 'package.json'
+      - 'CHANGELOG.md'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    # Set env var for use across steps
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_ADMIN_TOKEN }}
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Cache yarn & node modules
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: |
+          yarn
+
+      # Bump version and push tag
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@f02cbf500be5df43bea8aba831e5b2907aef3366
+        with:
+          github-token: ${{ secrets.GH_ADMIN_TOKEN }}
+          # use eslint preset: https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-eslint
+          preset: 'eslint'
+          output-file: 'CHANGELOG.md'
+
+      # Create a release
+      - name: Release
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e
+        # Skip release if no changelog update
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: Release ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+
+      # Publish NPM package
+      - name: Publish
+        # Skip publish if no changelog update
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
+        run: yarn run publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
