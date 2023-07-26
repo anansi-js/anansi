@@ -1,4 +1,4 @@
-# node-spider
+# Anansi
 
 [![Build Status](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml/badge.svg)](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml)
 [![npm](https://img.shields.io/npm/v/node-spider)](https://www.npmjs.com/package/@anansi-js/anansi)
