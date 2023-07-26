@@ -1,15 +1,12 @@
 {
   "name": "anansi-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js web spider for site search",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "files": [
     "dist"
   ],
-  "engines": {
-    "node": "18"
-  },
   "scripts": {
     "build": "NODE_ENV=production yarn rollup --config rollup.config.ts --configPlugin typescript",
     "lint": "yarn eslint .",
