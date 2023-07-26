@@ -1,6 +1,6 @@
 {
-  "name": "@anansi-js/anansi",
-  "version": "0.0.1",
+  "name": "anansi-js",
+  "version": "0.0.2",
   "description": "Node.js web spider for site search",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

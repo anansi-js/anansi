@@ -1,9 +1,9 @@
 # Anansi
 
 [![Build Status](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml/badge.svg)](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml)
-[![npm](https://img.shields.io/npm/v/node-spider)](https://www.npmjs.com/package/@anansi-js/anansi)
+[![npm](https://img.shields.io/npm/v/anansi-js)](https://www.npmjs.com/package/anansi-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/anansi-js/anansi/badge.svg)](https://snyk.io/test/github/anansi-js/anansi)
-[![MIT License](https://img.shields.io/npm/l/node-spider.svg)](#license)
+[![MIT License](https://img.shields.io/npm/l/anansi-js.svg)](#license)
 
 
 A Node.js web spider for site search. Inspired by the deprecated https://github.com/algolia/docsearch-scraper
@@ -23,18 +23,18 @@ npm
 ```sh
 npm install --save puppeteer # the project uses puppeteer-cluster and puppeteer under the hood
 npm install --save puppeteer-cluster # the project uses puppeteer-cluster and puppeteer under the hood
-npm install --save @anansi-js/anansi
+npm install --save anansi-js
 ```
 
 yarn
 ```sh
-yarn add puppeteer puppeteer-cluster @anansi-js/anansi
+yarn add puppeteer puppeteer-cluster anansi-js
 ```
 
 ### usage
 
 ```js
-import { crawlSite } from '@anansi-js/anansi';
+import { crawlSite } from 'anansi-js';
 
 const letsStartCrawling = async () => {
   await crawlSite({
