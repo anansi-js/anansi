@@ -1,5 +1,8 @@
 # Anansi
 
+![github-banner-new](https://github.com/anansi-js/anansi/assets/37445184/45b679e3-439d-45b3-89b0-7b8b758dfdaf)
+
+
 [![Build Status](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml/badge.svg)](https://github.com/anansi-js/anansi/actions/workflows/quality-checks.yml)
 [![npm](https://img.shields.io/npm/v/anansi-js)](https://www.npmjs.com/package/anansi-js)
 [![Known Vulnerabilities](https://snyk.io/test/github/anansi-js/anansi/badge.svg)](https://snyk.io/test/github/anansi-js/anansi)
