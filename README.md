@@ -1,4 +1,4 @@
-[github-banner-new](https://github.com/anansi-js/anansi/assets/github-banner-new.jpeg)
+[github-banner-new](assets/github-banner-new.jpeg)
 
 [Visit docs website](https://anansi-docs.netlify.app/)
 
