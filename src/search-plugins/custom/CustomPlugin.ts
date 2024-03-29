@@ -13,9 +13,11 @@ export class CustomPlugin implements SearchPlugin {
     if (this.opts.endpoints?.init?.url) {
       await fetch(this.opts.endpoints?.init?.url, {
         method: this.opts.endpoints?.init?.method || 'POST',
-        body:
-          this.opts.endpoints?.finish?.getBody?.() ||
-          JSON.stringify({ message: 'INIT!' }),
+        ...(this.opts.endpoints?.init?.method !== 'GET' && {
+          body:
+            this.opts.endpoints?.init?.getBody?.() ||
+            JSON.stringify({ message: 'INIT!' })
+        }),
         ...(this.opts.endpoints?.init?.headers && {
           headers: this.opts.endpoints?.init?.headers
         })
@@ -48,9 +50,11 @@ export class CustomPlugin implements SearchPlugin {
     if (this.opts.endpoints?.finish?.url) {
       await fetch(this.opts.endpoints?.finish?.url, {
         method: this.opts.endpoints?.finish?.method || 'POST',
-        body:
-          this.opts.endpoints?.finish?.getBody?.() ||
-          JSON.stringify({ message: 'FINISH!' }),
+        ...(this.opts.endpoints?.finish?.method !== 'GET' && {
+          body:
+            this.opts.endpoints?.finish?.getBody?.() ||
+            JSON.stringify({ message: 'FINISH!' })
+        }),
         ...(this.opts.endpoints?.finish?.headers && {
           headers: this.opts.endpoints?.finish?.headers
         })
