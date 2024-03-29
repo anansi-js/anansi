@@ -190,7 +190,7 @@ export class Spider {
     });
     await this.cluster.wait();
 
-    if (this.searchPlugin) {
+    if (this.searchPlugin?.finish) {
       await this.searchPlugin.finish();
     }
     this.logger.debug(

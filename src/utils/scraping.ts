@@ -124,7 +124,7 @@ export function constructRecords({
     l4: '',
     content: ''
   };
-  selectorMatches.forEach((contentMatch) => {
+  selectorMatches.forEach((contentMatch, position) => {
     if (
       contentMatch
       //  && !this.shouldExcludeResult?.(contentMatch)
@@ -141,7 +141,8 @@ export function constructRecords({
           metadata,
           weight: {
             level: getLevelWeight(level),
-            pageRank: pageRank || 0
+            pageRank: pageRank || 0,
+            position
           }
         });
       }

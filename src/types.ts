@@ -88,6 +88,7 @@ export interface ScrapedRecord {
   weight?: {
     level?: number;
     pageRank?: number;
+    position?: number;
   };
   metadata?: Record<string, string>;
 }

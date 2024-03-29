@@ -40,9 +40,8 @@ export const buildAlgoliaConfig = () => {
     minProximity: 1,
     customRanking: [
       'desc(weight.pageRank)',
-      'desc(weight.level)'
-      // TODO - think if we need this
-      // 'asc(weight.position)'
+      'desc(weight.level)',
+      'asc(weight.position)'
     ]
   };
   return config;
