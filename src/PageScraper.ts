@@ -1,16 +1,17 @@
 import { Page } from 'puppeteer';
 import { ScrapedRecord, ScraperSettings } from './types';
 import {
+  getFromBaseAndCustom,
+  uniq,
+  withoutTrailingSlash,
+  getBasicAuthHeader,
   getSettingsGroupForUrl,
   getSelectorMatches,
   getSelectorMetadata,
   removeExcludedElements,
   constructRecords
-} from './utils/scraping';
-import { getFromBaseAndCustom, uniq, withoutTrailingSlash } from './utils';
-import { EventService } from './events';
+} from './utils';
 import { Logger } from './Logger';
-import { getBasicAuthHeader } from './utils/basicAuth';
 
 interface PageScraperOptions {
   onStart?: () => void | Promise<void>;
@@ -32,7 +33,6 @@ export class PageScraper {
   private readonly onAbort?: () => void | Promise<void>;
   private readonly stopSignal?: () => void;
   private readonly settings: ScraperSettings;
-  private readonly eventService: EventService;
   private readonly logger: Logger;
 
   constructor(options: PageScraperOptions) {
@@ -41,10 +41,13 @@ export class PageScraper {
     this.onAbort = options.onAbort;
     this.stopSignal = options.stopSignal;
     this.settings = options.settings;
-    this.eventService = EventService.getInstance();
     this.logger = Logger.getInstance({});
   }
 
+  /**
+   * scrape an HTML page for links and content for searching. When done, call the PageScraper's onFinish callback with the
+   * obtained links and records
+   */
   public async scrapePage({
     page,
     data: { url }
@@ -125,7 +128,6 @@ export class PageScraper {
       }
 
       await page.goto(url);
-      // this.eventService.fireEvent('SCRAPER.URL.VISITED', { url });
 
       let skipCrawling = false;
       if (respectRobotsMeta) {
