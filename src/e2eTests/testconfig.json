@@ -1,0 +1,38 @@
+{
+  "maxConcurrency": 1,
+  "startUrls": [
+    "http://localhost:8080/test-page-1.html"
+  ],
+  "allowedDomains": [
+    "localhost"
+  ],
+  "followLinks": false,
+  "scraperSettings": {
+    "default": {
+      "hierarchySelectors": {
+        "l0": "title",
+        "l1": "#content h1",
+        "l2": "#content h2",
+        "l3": "#content h3",
+        "l4": "#content h4",
+        "content": "#content p"
+      },
+      "metadataSelectors": {
+        "ie": "meta[content^='ie']"
+      }
+    },
+    "shared": {
+      "onlyContentLevel": true,
+      "excludeSelectors": [
+        "header",
+        "footer"
+      ],
+      "userAgent": "Agent Smith"
+    }
+  },
+  "diagnostics": true,
+  "logLevel": "debug",
+  "maxIndexedRecords": 20
+}
+
+
