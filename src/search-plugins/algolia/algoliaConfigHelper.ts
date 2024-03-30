@@ -1,7 +1,10 @@
+import { SearchIndex } from 'algoliasearch';
 import * as fs from 'fs';
 
+type Settings = Awaited<ReturnType<SearchIndex['getSettings']>>;
+
 export const buildAlgoliaConfig = () => {
-  const config = {
+  const config: Settings = {
     attributesToRetrieve: [
       'hierarchy.l0',
       'hierarchy.l1',

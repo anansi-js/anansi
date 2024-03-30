@@ -9,7 +9,8 @@ import {
   getSelectorMatches,
   getSelectorMetadata,
   removeExcludedElements,
-  constructRecords
+  constructRecords,
+  cleanupUrl
 } from './utils';
 import { Logger } from './Logger';
 
@@ -56,10 +57,8 @@ export class PageScraper {
     data: { url: string };
   }) {
     try {
-      url = url
-        .replace('www.', '')
-        .replace(/\?(.)*/, '')
-        .replace(/#(.)*/, '');
+      const fullUrl = url;
+      url = cleanupUrl(url);
       const { settingsGroup: scraperPageSettings, groupName } =
         getSettingsGroupForUrl(this.settings, url);
       if (!scraperPageSettings) {
@@ -180,6 +179,7 @@ export class PageScraper {
           selectorMatchesByLevel,
           onlyContentLevel,
           url,
+          fullUrl,
           title,
           metadata,
           pageRank

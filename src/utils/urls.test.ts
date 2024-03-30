@@ -1,4 +1,4 @@
-import { urlToDomain, withoutTrailingSlash } from './urls';
+import { urlToDomain, withoutTrailingSlash, cleanupUrl } from './urls';
 
 describe('utils/urls', () => {
   test('utils/urls/withoutTrailingSlash - should return a url without its trailing slash', () => {
@@ -17,6 +17,17 @@ describe('utils/urls', () => {
     expect(urlToDomain('https://www.site.com')).toEqual('site.com');
     expect(urlToDomain('https://nested.subdomain.site.com')).toEqual(
       'nested.subdomain.site.com'
+    );
+  });
+
+  test('utils/urls/cleanupUrl - should return a url without www, trailing slash, hash and querystring', () => {
+    expect(cleanupUrl('https://www.site.com')).toEqual('https://site.com');
+    expect(cleanupUrl('https://site.com/')).toEqual('https://site.com');
+    expect(cleanupUrl('https://www.site.com?foo=bar')).toEqual(
+      'https://site.com'
+    );
+    expect(cleanupUrl('https://www.site.com/#section?foo=bar&bar=baz')).toEqual(
+      'https://site.com'
     );
   });
 });

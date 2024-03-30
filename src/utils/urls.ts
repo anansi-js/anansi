@@ -1,3 +1,15 @@
+/**
+ * return a url without www, hash and querystring
+ */
+export const cleanupUrl = (s: string) => {
+  return withoutTrailingSlash(
+    s
+      .replace('www.', '')
+      .replace(/\?(.)*/, '')
+      .replace(/#(.)*/, '')
+  );
+};
+
 export const withoutTrailingSlash = (s: string) => {
   const chars = s.split('');
   if (chars.at(-1) === '/') {

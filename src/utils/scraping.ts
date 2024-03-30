@@ -103,6 +103,7 @@ export function constructRecords({
   selectorMatchesByLevel,
   onlyContentLevel,
   url,
+  fullUrl,
   title,
   metadata,
   pageRank
@@ -111,6 +112,7 @@ export function constructRecords({
   selectorMatchesByLevel: Partial<Record<Level, string[]>>;
   onlyContentLevel?: boolean;
   url: string;
+  fullUrl: string;
   title: string;
   metadata: Record<string, any>;
   pageRank?: number;
@@ -135,6 +137,7 @@ export function constructRecords({
         records.push({
           uniqueId: md5(`${url}${contentMatch}`),
           url,
+          fullUrl,
           content: contentMatch,
           title,
           hierarchy: { ...hierarchy },

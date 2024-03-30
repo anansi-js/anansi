@@ -32,6 +32,7 @@ export class Spider {
   readonly scraperSettings: ScraperSettings;
   readonly timeout?: number;
   readonly maxIndexedRecords?: number;
+  readonly maxIndexedPages?: number;
   readonly minResultLength?: number;
   readonly followLinks?: boolean;
 
@@ -83,6 +84,9 @@ export class Spider {
 
     if (opts.maxIndexedRecords) {
       this.maxIndexedRecords = opts.maxIndexedRecords;
+    }
+    if (opts.maxIndexedPages) {
+      this.maxIndexedPages = opts.maxIndexedPages;
     }
     this.shouldExcludeResult = opts.shouldExcludeResult;
     if (opts.minResultLength) {
@@ -145,9 +149,14 @@ export class Spider {
             this.allowedDomains.includes(urlToDomain(link))
         );
         linksToCrawl.forEach((link: string) => {
-          this.state.visitedUrls.push(link);
-          this.cluster.queue({ url: link });
-          this.state.remainingQueueSize++;
+          if (
+            this.maxIndexedPages === undefined ||
+            this.state.visitedUrls.length < this.maxIndexedPages
+          ) {
+            this.state.visitedUrls.push(link);
+            this.cluster.queue({ url: link });
+            this.state.remainingQueueSize++;
+          }
         });
       }
       this.logger.debug(
@@ -184,7 +193,7 @@ export class Spider {
     });
     this.cluster.setTaskFunction(pageScraper.scrapePage.bind(pageScraper));
     await this.cluster.launch();
-    this.startUrls.forEach((url) => {
+    this.startUrls.slice(0, this.maxIndexedPages).forEach((url) => {
       this.state.visitedUrls.push(withoutTrailingSlash(url));
       this.cluster.queue({ url });
     });

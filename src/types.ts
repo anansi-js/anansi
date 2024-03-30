@@ -75,6 +75,7 @@ export interface ScraperSettings {
 export interface ScrapedRecord {
   uniqueId: string;
   url: string;
+  fullUrl: string;
   content: string;
   title: string;
   hierarchy: {
@@ -125,6 +126,8 @@ export interface SpiderOptions {
   timeout?: number;
   /** maximum number of records to index. If reached, the crawling jobs will terminate */
   maxIndexedRecords?: number;
+  /** maximum number of pages to index. If reached, the crawling jobs will terminate */
+  maxIndexedPages?: number;
   /** minimum word length to index */
   minResultLength?: number;
   /** predicate for excluding a result from being indexed. Returns true if the result should be excluded */
@@ -145,6 +148,7 @@ export type CrawlSiteOptionsCrawlerConfig = Pick<
   | 'diagnosticsFilePath'
   | 'timeout'
   | 'maxIndexedRecords'
+  | 'maxIndexedPages'
   | 'minResultLength'
   | 'logLevel'
   | 'followLinks'

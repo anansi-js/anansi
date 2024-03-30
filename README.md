@@ -80,6 +80,7 @@ instantiates a Spider object, initializing it based on your config file and sett
 | `diagnosticsFilePath` | N | string | path to the file where diagnostics will be written to |
 | `timeout` | N | number | timeout in ms |
 | `maxIndexedRecords` | N | number | maximum number of records to index. If reached, the crawling jobs will terminate |
+| `maxIndexedPages` | N | number | maximum number of pages to index. If reached, the crawling jobs will terminate |
 
 #### CrawlSiteOptionsCrawlerConfig
 | Property | Required | Type | Description |

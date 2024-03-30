@@ -1,0 +1,28 @@
+{
+  "maxConcurrency": 1,
+  "startUrls": [
+    "https://docs.nestjs.com"
+  ],
+  "allowedDomains": [
+    "docs.nestjs.com"
+  ],
+  "followLinks": true,
+  "scraperSettings": {
+    "default": {
+      "hierarchySelectors": {
+        "l0": ".content h3",
+        "l1": ".content h4",
+        "content": ".content p"
+      }
+    },
+    "shared": {
+      "onlyContentLevel": true
+    }
+  },
+  "diagnostics": true,
+  "logLevel": "debug",
+  "maxIndexedRecords": 100,
+  "maxIndexedPages": 1
+}
+
+
