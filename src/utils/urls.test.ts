@@ -1,4 +1,9 @@
-import { urlToDomain, withoutTrailingSlash, cleanupUrl } from './urls';
+import {
+  urlToDomain,
+  withoutTrailingSlash,
+  cleanupUrl,
+  injectUrlParams
+} from './urls';
 
 describe('utils/urls', () => {
   test('utils/urls/withoutTrailingSlash - should return a url without its trailing slash', () => {
@@ -29,5 +34,15 @@ describe('utils/urls', () => {
     expect(cleanupUrl('https://www.site.com/#section?foo=bar&bar=baz')).toEqual(
       'https://site.com'
     );
+  });
+
+  test('utils/urls/injectUrlParams', () => {
+    expect(
+      injectUrlParams({
+        url: 'https://www.site.com/:id1/z/:id2',
+        pathParams: { id1: 'xx', id2: 'yy' },
+        queryParams: { foo: 'bar' }
+      })
+    ).toEqual('https://www.site.com/xx/z/yy?foo=bar');
   });
 });

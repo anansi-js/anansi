@@ -1,6 +1,7 @@
 import { GeneralPluginSettings, SearchPlugin } from '../interfaces';
 import { ScrapedRecord } from '../../types';
 import { CustomPluginOptions } from './types';
+import { injectUrlParams } from '../../utils';
 
 export class CustomPlugin implements SearchPlugin {
   private opts: Partial<CustomPluginOptions & GeneralPluginSettings>;
@@ -11,7 +12,12 @@ export class CustomPlugin implements SearchPlugin {
 
   async init() {
     if (this.opts.endpoints?.init?.url) {
-      await fetch(this.opts.endpoints?.init?.url, {
+      const url = injectUrlParams({
+        url: this.opts.endpoints?.init?.url,
+        pathParams: this.opts.endpoints?.init?.pathParams,
+        queryParams: this.opts.endpoints?.init.queryParams
+      });
+      await fetch(url, {
         method: this.opts.endpoints?.init?.method || 'POST',
         ...(this.opts.endpoints?.init?.method !== 'GET' && {
           body:
@@ -29,7 +35,12 @@ export class CustomPlugin implements SearchPlugin {
 
   async addRecords(newRecords: ScrapedRecord[]) {
     if (this.opts.endpoints?.addRecords?.url) {
-      await fetch(this.opts.endpoints?.addRecords?.url, {
+      const url = injectUrlParams({
+        url: this.opts.endpoints?.addRecords?.url,
+        pathParams: this.opts.endpoints?.addRecords?.pathParams,
+        queryParams: this.opts.endpoints?.addRecords.queryParams
+      });
+      await fetch(url, {
         method: 'POST',
         body:
           this.opts.endpoints?.addRecords?.getBody?.(newRecords) ||
@@ -48,7 +59,12 @@ export class CustomPlugin implements SearchPlugin {
 
   async finish() {
     if (this.opts.endpoints?.finish?.url) {
-      await fetch(this.opts.endpoints?.finish?.url, {
+      const url = injectUrlParams({
+        url: this.opts.endpoints?.finish?.url,
+        pathParams: this.opts.endpoints?.finish?.pathParams,
+        queryParams: this.opts.endpoints?.finish.queryParams
+      });
+      await fetch(url, {
         method: this.opts.endpoints?.finish?.method || 'POST',
         ...(this.opts.endpoints?.finish?.method !== 'GET' && {
           body:
