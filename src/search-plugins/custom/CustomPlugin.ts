@@ -12,20 +12,27 @@ export class CustomPlugin implements SearchPlugin {
 
   async init() {
     if (this.opts.endpoints?.init?.url) {
-      const url = injectUrlParams({
-        url: this.opts.endpoints?.init?.url,
-        pathParams: this.opts.endpoints?.init?.pathParams,
-        queryParams: this.opts.endpoints?.init.queryParams
+      const endpoint = this.opts.endpoints?.init;
+      const {
+        url,
+        pathParams,
+        queryParams,
+        method = 'POST',
+        getBody,
+        headers
+      } = endpoint;
+      const fetchUrl = injectUrlParams({
+        url,
+        pathParams,
+        queryParams
       });
-      await fetch(url, {
-        method: this.opts.endpoints?.init?.method || 'POST',
-        ...(this.opts.endpoints?.init?.method !== 'GET' && {
-          body:
-            this.opts.endpoints?.init?.getBody?.() ||
-            JSON.stringify({ message: 'INIT!' })
+      await fetch(fetchUrl, {
+        method,
+        ...(method !== 'GET' && {
+          body: getBody?.() || JSON.stringify({ message: 'INIT!' })
         }),
-        ...(this.opts.endpoints?.init?.headers && {
-          headers: this.opts.endpoints?.init?.headers
+        ...(headers && {
+          headers
         })
       });
     } else if (this.opts.init) {
@@ -35,21 +42,23 @@ export class CustomPlugin implements SearchPlugin {
 
   async addRecords(newRecords: ScrapedRecord[]) {
     if (this.opts.endpoints?.addRecords?.url) {
-      const url = injectUrlParams({
-        url: this.opts.endpoints?.addRecords?.url,
-        pathParams: this.opts.endpoints?.addRecords?.pathParams,
-        queryParams: this.opts.endpoints?.addRecords.queryParams
+      const endpoint = this.opts.endpoints?.addRecords;
+      const { url, pathParams, queryParams, getBody, headers } = endpoint;
+      const fetchUrl = injectUrlParams({
+        url,
+        pathParams,
+        queryParams
       });
-      await fetch(url, {
+      await fetch(fetchUrl, {
         method: 'POST',
         body:
-          this.opts.endpoints?.addRecords?.getBody?.(newRecords) ||
+          getBody?.(newRecords) ||
           JSON.stringify({
             message: 'ADD RECORDS!',
             data: newRecords
           }),
-        ...(this.opts.endpoints?.addRecords?.headers && {
-          headers: this.opts.endpoints?.addRecords?.headers
+        ...(headers && {
+          headers
         })
       });
     } else if (this.opts.addRecords) {
@@ -59,20 +68,27 @@ export class CustomPlugin implements SearchPlugin {
 
   async finish() {
     if (this.opts.endpoints?.finish?.url) {
-      const url = injectUrlParams({
-        url: this.opts.endpoints?.finish?.url,
-        pathParams: this.opts.endpoints?.finish?.pathParams,
-        queryParams: this.opts.endpoints?.finish.queryParams
+      const endpoint = this.opts.endpoints?.finish;
+      const {
+        url,
+        pathParams,
+        queryParams,
+        method = 'POST',
+        getBody,
+        headers
+      } = endpoint;
+      const fetchUrl = injectUrlParams({
+        url,
+        pathParams,
+        queryParams
       });
-      await fetch(url, {
-        method: this.opts.endpoints?.finish?.method || 'POST',
-        ...(this.opts.endpoints?.finish?.method !== 'GET' && {
-          body:
-            this.opts.endpoints?.finish?.getBody?.() ||
-            JSON.stringify({ message: 'FINISH!' })
+      await fetch(fetchUrl, {
+        method,
+        ...(method !== 'GET' && {
+          body: getBody?.() || JSON.stringify({ message: 'FINISH!' })
         }),
-        ...(this.opts.endpoints?.finish?.headers && {
-          headers: this.opts.endpoints?.finish?.headers
+        ...(headers && {
+          headers
         })
       });
     } else if (this.opts.finish) {
