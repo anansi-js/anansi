@@ -177,6 +177,7 @@ describe('utils/scraping', () => {
       },
       onlyContentLevel: false,
       url: 'www.google.com',
+      fullUrl: 'www.google.com',
       title: 'test',
       metadata: {}
     });

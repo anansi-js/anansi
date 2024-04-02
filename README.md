@@ -14,7 +14,7 @@ NOTE: The project is in a very early stage.
 
 ## overview
 
-Anansi lets you crawl your website, scrape content that matches html selectors you specified in a config file, then index them in a search engine (currently only supports Algolia) to serve your site search features.
+Anansi lets you crawl your website, scrape content that matches html selectors you specified in a config file, then index them in a search engine (currently supports [Algolia](https://www.algolia.com/) as well as your own custom search plugin) to serve your site search features.
 
 Under the hood, the project uses [puppeteer-cluster](https://github.com/thomasdondorf/puppeteer-cluster), which in turn uses [puppeteer](https://github.com/puppeteer/puppeteer)
 
@@ -80,6 +80,7 @@ instantiates a Spider object, initializing it based on your config file and sett
 | `diagnosticsFilePath` | N | string | path to the file where diagnostics will be written to |
 | `timeout` | N | number | timeout in ms |
 | `maxIndexedRecords` | N | number | maximum number of records to index. If reached, the crawling jobs will terminate |
+| `maxIndexedPages` | N | number | maximum number of pages to index. If reached, the crawling jobs will terminate |
 
 #### CrawlSiteOptionsCrawlerConfig
 | Property | Required | Type | Description |

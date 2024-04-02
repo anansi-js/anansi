@@ -1,10 +1,11 @@
 import { AlgoliaPluginOptions } from './algolia/types';
+import { CustomPluginOptions } from './custom/types';
 
 export interface SearchPlugin {
   addRecords: (records: any[]) => Promise<void>;
   generateConfig?: () => Promise<any>;
   init?: () => Promise<void>;
-  finish: () => Promise<void>;
+  finish?: () => Promise<void>;
 }
 
 export interface GeneralPluginSettings {
@@ -13,7 +14,7 @@ export interface GeneralPluginSettings {
   keepNonCrawlerRecords?: boolean;
 }
 
-export type SearchEngineName = 'algolia' | 'elasticsearch' | 'test';
+export type SearchEngineName = 'algolia' | 'elasticsearch' | 'test' | 'custom';
 
 export interface SearchPluginOptions {
   generalSettings: GeneralPluginSettings;
@@ -24,4 +25,6 @@ export interface SearchPluginOptions {
   algolia?: AlgoliaPluginOptions;
   /** elasticsearch specific optins */
   elasticsearch?: { foo: string }; // TODO - add real options type
+  /** custom plugin specific optins */
+  custom?: CustomPluginOptions;
 }

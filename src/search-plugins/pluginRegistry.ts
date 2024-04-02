@@ -1,4 +1,5 @@
 import { AlgoliaPlugin } from './algolia/AlgoliaPlugin';
+import { CustomPlugin } from './custom/CustomPlugin';
 import { DummyFsPlugin } from './dummy-fs-plugin/DummyFsPlugin';
 import { SearchPlugin, SearchPluginOptions } from './interfaces';
 
@@ -13,6 +14,12 @@ export const getPlugin = (options?: SearchPluginOptions): SearchPlugin => {
     }
     case 'test': {
       return new DummyFsPlugin();
+    }
+    case 'custom': {
+      return new CustomPlugin({
+        ...options.custom,
+        ...options.generalSettings
+      });
     }
     default: {
       throw new Error('unknown plugin type');

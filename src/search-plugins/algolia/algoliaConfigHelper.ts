@@ -1,7 +1,10 @@
+import { SearchIndex } from 'algoliasearch';
 import * as fs from 'fs';
 
+type Settings = Awaited<ReturnType<SearchIndex['getSettings']>>;
+
 export const buildAlgoliaConfig = () => {
-  const config = {
+  const config: Settings = {
     attributesToRetrieve: [
       'hierarchy.l0',
       'hierarchy.l1',
@@ -40,9 +43,8 @@ export const buildAlgoliaConfig = () => {
     minProximity: 1,
     customRanking: [
       'desc(weight.pageRank)',
-      'desc(weight.level)'
-      // TODO - think if we need this
-      // 'asc(weight.position)'
+      'desc(weight.level)',
+      'asc(weight.position)'
     ]
   };
   return config;
