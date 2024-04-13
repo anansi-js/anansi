@@ -1,4 +1,13 @@
-## 0.0.4 (2024-04-02)
+## [0.0.5](https://github.com/anansi-js/anansi/compare/v0.0.4...v0.0.5) (2024-04-13)
+
+
+### update
+
+* resolve circular deps ([902b9a6](https://github.com/anansi-js/anansi/commit/902b9a61dbe9f5c9764347daed7d2094a46352b4))
+
+
+
+## [0.0.4](https://github.com/anansi-js/anansi/compare/64000e386d9326046407ad8a79124539ba8b40ef...v0.0.4) (2024-04-02)
 
 
 ### chore
