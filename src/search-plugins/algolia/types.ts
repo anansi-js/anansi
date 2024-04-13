@@ -1,4 +1,6 @@
-export interface AlgoliaPluginOptions {
+import { SearchPlugin } from '../interfaces';
+
+export interface AlgoliaPluginOptions extends SearchPlugin {
   apiKey: string;
   appId: string;
   indexName: string;

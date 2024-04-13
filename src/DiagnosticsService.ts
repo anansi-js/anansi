@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { getPropertyAtPath, setPropertyAtPath } from './utils';
+import { getPropertyAtPath, setPropertyAtPath } from './utils/misc';
 
 interface Stat {
   name: string;

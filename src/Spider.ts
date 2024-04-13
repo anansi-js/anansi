@@ -1,7 +1,6 @@
 import { DiagnosticsService } from './DiagnosticsService';
 import { Logger } from './Logger';
-import { SearchPlugin, SearchPluginOptions } from './search-plugins/interfaces';
-import { getPlugin } from './search-plugins/pluginRegistry';
+import { SearchPlugin, SearchPluginOptions, getPlugin } from './search-plugins';
 import { ScrapedRecord, ScraperSettings, SpiderOptions } from './types';
 import {
   uniq,

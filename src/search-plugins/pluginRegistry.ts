@@ -1,7 +1,8 @@
 import { AlgoliaPlugin } from './algolia/AlgoliaPlugin';
 import { CustomPlugin } from './custom/CustomPlugin';
 import { DummyFsPlugin } from './dummy-fs-plugin/DummyFsPlugin';
-import { SearchPlugin, SearchPluginOptions } from './interfaces';
+import { SearchPlugin } from './interfaces';
+import { SearchPluginOptions } from './types';
 
 export const getPlugin = (options?: SearchPluginOptions): SearchPlugin => {
   switch (options?.engine) {

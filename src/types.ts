@@ -1,6 +1,6 @@
 import type { DiagnosticsService } from './DiagnosticsService';
 import type { Logger, LogLevel } from './Logger';
-import type { SearchPluginOptions } from './search-plugins/interfaces';
+import type { SearchPluginOptions } from './search-plugins/types';
 
 /**
  * hierarchy selectors. Essentially a mapping from html selectors to indexed hierarchy levels:

@@ -1,10 +1,11 @@
 import algoliasearch, { SearchClient, SearchIndex } from 'algoliasearch';
-import { GeneralPluginSettings, SearchPlugin } from '../interfaces';
+import { SearchPlugin } from '../interfaces';
 import { buildAlgoliaConfig, parseAlgoliaConfig } from './algoliaConfigHelper';
 import { AlgoliaPluginOptions } from './types';
 import * as fs from 'fs';
 import { ScrapedRecord } from '../../types';
 import { transformRecord } from './transform';
+import { GeneralPluginSettings } from '../types';
 
 export class AlgoliaPlugin implements SearchPlugin {
   apiKey: string;

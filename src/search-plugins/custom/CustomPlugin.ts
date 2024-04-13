@@ -1,7 +1,8 @@
-import { GeneralPluginSettings, SearchPlugin } from '../interfaces';
+import { SearchPlugin } from '../interfaces';
 import { ScrapedRecord } from '../../types';
 import { CustomPluginOptions } from './types';
 import { injectUrlParams } from '../../utils';
+import { GeneralPluginSettings } from '../types';
 
 export class CustomPlugin implements SearchPlugin {
   private opts: Partial<CustomPluginOptions & GeneralPluginSettings>;

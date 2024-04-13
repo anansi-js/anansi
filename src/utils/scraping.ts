@@ -2,10 +2,11 @@ import {
   ScraperSettings,
   HierarchySelectors,
   MetadataSelectors,
-  ScrapedRecord
+  ScrapedRecord,
+  Level
 } from '../types';
-import { uniq as _uniq, withoutTrailingSlash } from '../utils';
-import { Level } from '../types';
+import { withoutTrailingSlash } from './urls';
+import { uniq as _uniq } from './misc';
 import { getContentMatchLevel, getLevelWeight } from '../hierarchy';
 import { md5 } from './hashing';
 
