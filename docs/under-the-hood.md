@@ -1,58 +1,70 @@
-# under the hood
+# 🔍 Under the Hood
 
-## how the spider works
+## 🕷️ How the Spider Works
 
-The spider uses puppeteer to visit the start URL (or start URLs) provided in the config file. It queues a puppeteer job for each start URL.
-In that job, it will then:
-- visit the URL in a Chrome headless browser
-- scrape the rendered page to construct the search records (see next section)
-- extract all links from the visited page, and queue the obtained URLs (excluding ones that have already been visited in this run) for further jobs
-- the spider will stop once the queue is empty (meaning, all start URLs and pages that are reachable via links from the start URLs, have been visited)
+The spider uses [Puppeteer](https://pptr.dev/) to visit each **start URL** defined in the config file. For every start URL, it queues a job that does the following:
 
-## scraping and constructing an index record
+- Opens the URL in a headless Chrome browser.
+- Scrapes the rendered page and constructs **search index records** (see next section).
+- Extracts all links from the page and adds them to the queue — unless the link has already been visited during the current run.
+- Continues this process recursively until the queue is empty (i.e. all reachable pages from the start URLs have been visited).
 
-### a record structure
+---
+
+## 🧱 Scraping and Constructing an Index Record
+
+### 🧬 Record Structure
+
+Each piece of content scraped from the site is turned into a record with the following structure:
+
 ```ts
 {
-  uniqueId: string; // an md5 hash of the page URL and the text match (while this combination is not unique across a page, only the last matched record will be indexed so it can still serve as a unique ID)
-  url: string; // the URL of the page from which the record was scraped (in other words, the page where the content was found)
-  content: string; // the record's content field - typically used for a search result's description
-  title: string; // the record's title field
-  hierarchy: Hierarchy; // the hierarchy field - see below for more details
-  metadata: Metadata; // metadata field - for any additional custom data from the scraper
-  weight: { // for ranking
-    level: number;
-    pageRank: number;
+  uniqueId: string;      // md5 hash of (URL + text match). Only the latest match per page is indexed.
+  url: string;           // The source page's URL.
+  content: string;       // The main content of the record (shown in search results).
+  title: string;         // Title of the record.
+  hierarchy: Hierarchy;  // Structured location of the content (see below).
+  metadata: Metadata;    // Optional custom metadata.
+  weight: {
+    level: number;       // Based on hierarchy level (e.g. l0 is most important).
+    pageRank: number;    // Optional additional ranking.
   }
 }
 ```
 
-#### hierarchy object structure
+### 📚 Hierarchy Structure
+
 ```ts
 {
-  l0: string; // matches to this field will have the greatest contribution to the record's custom ranking (weight.level property)
+  l0: string;     // Most important (e.g. page title)
   l1: string;
   l2: string;
   l3: string;
   l4: string;
-  content: string; // matches to this field will have the lowest contribution to the record's custom ranking (weight.level property)
-},
+  content: string; // Least important (e.g. paragraph text)
+}
 ```
 
-### the page scraping process in details
-Each scraping job executes in a puppeteer-cluster task that runs on a single page. That job consists of the following steps:
-- find the user-provided scraper settings that should apply to the page's URL (based on the settings URL pattern)
-- query the DOM for the selectors specified in the settings that were retrieved in the previous step
-- iterate over the retrieved DOM elements in their order of appearance in the DOM, turning them into indexed records in the structure detailed above
-- during the scraping of a page, maintain a hierarchy object and create the different records with the state of that hierarchy at the point of their creation
+The **hierarchy** affects ranking: matches at higher levels (e.g. `l0`) are considered more relevant than lower ones (`content`).
 
-### the hierarchy object explained
-The hierarchy lets you define up to 5 levels of content to be matched, in a descending level of importance (meaning, level 0 should match the most important content). A typical setting is for level 0 to match the page title.
-As the scraper iterates over the matched DOM elements in their order of appearance in the DOM, for each matched element it determines its hierarchy level in the provided settings. It then updates the current hierarchy state so it stores the current matched content under the property `[<level>]`.
-The hierarchy state will continue getting updated while the page is being scraped, just before each new record is being created (that record will always include the updated hierarchy state at the time).
-The hierarchy state will get cleared when moving to scrape the next page.
-The importance of the hierarchy will come into play when searching for results (after the scraped records have been indexed for search): for a given search text, records that match the text in higher hierarchy levels, will be deemed more relevant than records that match the text in lower hierarchy levels.
-For example, if my settings included:
+---
+
+### ⚙️ Scraping Flow (Per Page)
+
+Each scraping job runs inside a Puppeteer Cluster task, and follows these steps:
+
+1. Find the scraper config that matches the current page URL (based on pattern matching).
+2. Use the provided selectors to query the DOM for elements to extract.
+3. Iterate through these elements in their DOM order and generate search records using the structure above.
+4. While doing this, keep track of the **current hierarchy state** (see below) and include it in each new record.
+5. Once a new page is loaded, reset the hierarchy.
+
+---
+
+## 🧭 How the Hierarchy Works
+
+The **hierarchy** allows you to assign semantic importance to elements using up to five levels (`l0` to `l4`), plus a `content` level for regular text. For example:
+
 ```json
 "hierarchySelectors": {
   "l0": "title",
@@ -61,27 +73,34 @@ For example, if my settings included:
   "l3": "#content h3",
   "l4": "#content h4",
   "content": "#content p"
-},
+}
 ```
 
-And a scraped page included the markup:
+As the spider processes elements on the page:
+
+- It checks which hierarchy level each selector belongs to.
+- It updates the **hierarchy state** with the matched text at that level.
+- Every record is created using the **latest state** of the hierarchy at that point in the DOM.
+
+This hierarchy determines **search ranking** after indexing:
+- Matches in higher levels (like `l0`) are ranked above those in lower levels (like `content`).
+
+---
+
+### 🧪 Example: Why Hierarchy Affects Ranking
+
+Given these two pages:
+
+#### Page 1:
 ```html
-<head>
-  <title>Upcoming events</title>
-</head>
-<body>
-  <!-- LIST OF EVENTS... -->
-</body>
+<title>Upcoming events</title>
+<!-- ... -->
 ```
 
-While another page included the markup:
+#### Page 2:
 ```html
-<head>
-  <title>About us</title>
-</head>
-<body>
-  <p>At coolsite.org we promote all sorts of events...</p>
-</body>
+<title>About us</title>
+<p>At coolsite.org we promote all sorts of events...</p>
 ```
 
-Then searching for "events" against the indexed scraped records will prioritise the record created from the first page's title element over the record created from the second page's p element (they both include the word "events" but the title element gives the first record a higher rank due to it being a level 0 match as opposed to a content level match)
+A search for **"events"** would prioritize the record from **Page 1** (where "events" appears in the `<title>`, i.e. `l0`), over Page 2 (where it appears in a `<p>`, i.e. `content`), due to the higher weight of level `l0`.
