@@ -5,8 +5,7 @@ import { AlgoliaPluginOptions } from './types';
 import * as fs from 'fs';
 import { ScrapedRecord } from '../../types';
 import { transformRecord } from './transform';
-import { GeneralPluginSettings } from '../types';
-
+import { GeneralPluginSettings } from '../generalPluginSettings';
 export class AlgoliaPlugin implements SearchPlugin {
   apiKey: string;
   appId: string;
@@ -17,7 +16,7 @@ export class AlgoliaPlugin implements SearchPlugin {
   customConfig?: Record<string, unknown>;
   keepNonCrawlerRecords?: boolean;
 
-  constructor(opts: Partial<AlgoliaPluginOptions & GeneralPluginSettings>) {
+  constructor(opts: AlgoliaPluginOptions & GeneralPluginSettings) {
     if (!opts.apiKey || !opts.appId || !opts.indexName) {
       throw new Error(
         'one or more of the following options is missing from the Algolia plugin initializer: apiKey, appId, indexName'

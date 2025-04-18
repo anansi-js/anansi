@@ -34,6 +34,7 @@ export class Spider {
   readonly maxIndexedPages?: number;
   readonly minResultLength?: number;
   readonly followLinks?: boolean;
+  searchPluginOptions?: SearchPluginOptions;
 
   searchPlugin?: SearchPlugin;
   logger: Logger;
@@ -67,9 +68,7 @@ export class Spider {
     this.scraperSettings = opts.scraperSettings;
     this.logger =
       opts.logger || Logger.getInstance({ logLevel: opts.logLevel });
-    if (opts.searchEngineOpts) {
-      this.registerSearchPlugin(opts.searchEngineOpts);
-    }
+    this.searchPluginOptions = opts.searchEngineOpts;
     this.diagnostics =
       opts.diagnostics ||
       !!opts.diagnosticsFilePath ||
@@ -94,8 +93,12 @@ export class Spider {
     this.followLinks = opts.followLinks === false ? false : true;
   }
 
-  registerSearchPlugin(options: SearchPluginOptions) {
-    this.searchPlugin = getPlugin(options);
+  async registerSearchPlugin(options: SearchPluginOptions) {
+    const searchPlugin = await getPlugin(options);
+    if (searchPlugin.init) {
+      await searchPlugin.init();
+    }
+    this.searchPlugin = searchPlugin;
     this.logger.debug('successfully registered search plugin', options.engine);
     this.diagnosticsService?.addStat({
       name: `searchEngine > totalErrors`,
@@ -176,8 +179,8 @@ export class Spider {
 
   async crawl() {
     this.state.stopping = false;
-    if (this.searchPlugin?.init) {
-      await this.searchPlugin.init();
+    if (this.searchPluginOptions) {
+      await this.registerSearchPlugin(this.searchPluginOptions);
     }
     this.state.lastStartTime = Date.now();
     this.cluster = new ClusterProxy({

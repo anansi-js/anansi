@@ -1,13 +1,15 @@
 import { AlgoliaPluginOptions } from './algolia/types';
 import { CustomPluginOptions } from './custom/types';
+import { PineconePluginOptions } from './pinecone/types';
+import { ElasticsearchPluginOptions } from './elasticsearch/types';
+import { GeneralPluginSettings } from './generalPluginSettings';
 
-export interface GeneralPluginSettings {
-  /** should index records that did not originate in a site crawl be kept after re-populating the index
-   * with new site crawl records. Useful if the site search index includes entries from sources other than the crawler */
-  keepNonCrawlerRecords?: boolean;
-}
-
-export type SearchEngineName = 'algolia' | 'elasticsearch' | 'test' | 'custom';
+export type SearchEngineName =
+  | 'algolia'
+  | 'elasticsearch'
+  | 'test'
+  | 'custom'
+  | 'pinecone';
 
 export interface SearchPluginOptions {
   generalSettings: GeneralPluginSettings;
@@ -17,7 +19,9 @@ export interface SearchPluginOptions {
   /** algolia specific optins */
   algolia?: AlgoliaPluginOptions;
   /** elasticsearch specific optins */
-  elasticsearch?: { foo: string }; // TODO - add real options type
+  elasticsearch?: ElasticsearchPluginOptions;
   /** custom plugin specific optins */
   custom?: CustomPluginOptions;
+  /** pinecone specific options */
+  pinecone?: PineconePluginOptions;
 }

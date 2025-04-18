@@ -129,3 +129,23 @@ hierarchy selectors. Essentially a mapping from html selectors to indexed hierar
 ## Under the hood
 For detailed information about the way the spider works, visit:
 https://github.com/anansi-js/anansi/blob/main/docs/under-the-hood.md
+
+## Optional Dependencies
+
+The package uses optional peer dependencies for search engine plugins. You only need to install the dependencies for the plugins you plan to use:
+
+- For Algolia: `npm install algoliasearch`
+- For Elasticsearch: `npm install @elastic/elasticsearch`
+- For Pinecone: `npm install @pinecone-database/pinecone`
+
+Example:
+```bash
+# If you only need Algolia
+npm install anansi-js algoliasearch
+
+# If you only need Elasticsearch
+npm install anansi-js @elastic/elasticsearch
+
+# If you only need Pinecone
+npm install anansi-js @pinecone-database/pinecone
+```

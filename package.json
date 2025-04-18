@@ -69,9 +69,21 @@
     "wait-on": "^7.0.1"
   },
   "peerDependencies": {
-    "algoliasearch": ">= 4.14.2 < 5",
-    "puppeteer": ">= 19.2.2 < 20",
+    "puppeteer": ">= 19.2.2 < 5",
     "puppeteer-cluster": ">= 0.23.0 < 1"
   },
-  "dependencies": {}
+  "peerDependenciesMeta": {
+    "algoliasearch": {
+      "optional": true
+    },
+    "@elastic/elasticsearch": {
+      "optional": true
+    },
+    "@pinecone-database/pinecone": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
+  }
 }
